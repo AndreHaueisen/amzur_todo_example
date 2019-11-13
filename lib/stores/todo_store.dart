@@ -12,11 +12,6 @@ class TodoStore = _TodoStore with _$TodoStore;
 
 abstract class _TodoStore with Store {
 
-  // QUESTION:
-  // Can we use
-     //@observable
-     //List<Todo> todos = [];
-  // What is the difference between the code above and ObservableList?
   ObservableList<Todo> todos = ObservableList();
 
   @computed
@@ -47,6 +42,12 @@ abstract class _TodoStore with Store {
   void toggleTaskStatus(int index, bool isDone){
     Todo oldTodo = todos[index];
     todos[index] = oldTodo.copy(isDone: isDone);
+  }
+
+  @action
+  void updateTaskText(int index, String nextTask){
+    Todo oldTodo = todos[index];
+    todos[index] = oldTodo.copy(task: nextTask);
   }
 
 }

@@ -52,4 +52,14 @@ mixin _$TodoStore on _TodoStore, Store {
       _$_TodoStoreActionController.endAction(_$actionInfo);
     }
   }
+
+  @override
+  void updateTaskText(int index, String nextTask) {
+    final _$actionInfo = _$_TodoStoreActionController.startAction();
+    try {
+      return super.updateTaskText(index, nextTask);
+    } finally {
+      _$_TodoStoreActionController.endAction(_$actionInfo);
+    }
+  }
 }

@@ -1,5 +1,7 @@
+import 'package:amzur_todo_example/dialogs/edit_todo_dialog.dart';
 import 'package:amzur_todo_example/main.dart';
 import 'package:amzur_todo_example/models/todo.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -52,28 +54,37 @@ class _TodoScreenState extends State<TodoScreen> {
   Widget _buildTodoItem(int index) {
     Todo todo = todoStore.todos[index];
 
-    return Dismissible(
-      key: UniqueKey(),
-      // Why do need a key here? What are the different types of keys?
-      onDismissed: (_) {
-        todoStore.removeTodo(todo);
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return EditTodoDialog(index);
+            });
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text(todo.task),
-            ),
-            Checkbox(
-              value: todo.isDone,
-              onChanged: (bool isDone) {
-                todoStore.toggleTaskStatus(index, isDone);
-              },
-            ),
-          ],
+      child: Dismissible(
+        key: UniqueKey(),
+        // Why do need a key here? What are the different types of keys?
+        onDismissed: (_) {
+          todoStore.removeTodo(todo);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(todo.task),
+              ),
+              Checkbox(
+                value: todo.isDone,
+                onChanged: (bool isDone) {
+                  todoStore.toggleTaskStatus(index, isDone);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
