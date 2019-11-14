@@ -10,7 +10,7 @@ class EditTodoDialog extends StatelessWidget {
 
   EditTodoDialog(this.todoIndex) : editingTodo = todoStore.todos[todoIndex] {
     _controller = TextEditingController(text: editingTodo.task);
-    _controller.value = TextEditingValue(  //TODO this fixes the cursor position when the user clicks it. Try removing it to see what happens
+    _controller.value = TextEditingValue(
       text: editingTodo.task,
       selection: TextSelection.collapsed(
         offset: editingTodo.task.length,

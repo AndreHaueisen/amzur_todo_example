@@ -24,6 +24,7 @@ dependencies:
   flutter_mobx: ^0.3.3
 
   font_awesome_flutter: ^8.5.0 # contains more icon options
+  shared_preferences: ^0.5.4+5 # saves state across sections
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

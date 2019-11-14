@@ -1,7 +1,7 @@
+import 'package:amzur_todo_example/constants.dart';
 import 'package:amzur_todo_example/dialogs/edit_todo_dialog.dart';
 import 'package:amzur_todo_example/main.dart';
 import 'package:amzur_todo_example/models/todo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -17,7 +17,18 @@ class _TodoScreenState extends State<TodoScreen> {
       appBar: AppBar(
         title: Text(
             "Completion rate ${todoStore.completionPercentage}%"), //TODO Why is the title not changing?
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              loginStore.logOut().then((_){
+                Navigator.of(context).pushReplacementNamed(Constants.ROUTE_LOGIN);
+              });
+            },
+          ),
+        ],
       ),
+
       body: Observer(
         builder: (_) {
           return todoStore.todos.isNotEmpty

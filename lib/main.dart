@@ -1,14 +1,34 @@
 import 'package:amzur_todo_example/constants.dart';
 import 'package:amzur_todo_example/screens/login_screen.dart';
+import 'package:amzur_todo_example/screens/splash_screen.dart';
 import 'package:amzur_todo_example/screens/todo_screen.dart';
+import 'package:amzur_todo_example/stores/login_store.dart';
 import 'package:amzur_todo_example/stores/todo_store.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Important line if you are going to hang app initialization
+  await loginStore.initialize();
+  String openingScreen;
+
+  if (loginStore.isLoggedIn) {
+    openingScreen = Constants.ROUTE_TODO;
+  } else {
+    openingScreen = Constants.ROUTE_LOGIN;
+  }
+  runApp(MyApp(
+    openingScreen: openingScreen,
+  ));
+}
 
 final TodoStore todoStore = TodoStore();
+final LoginStore loginStore = LoginStore();
 
 class MyApp extends StatelessWidget {
+  final String openingScreen;
+
+  MyApp({@required this.openingScreen});
 
   // This widget is the root of your application.
   @override
@@ -20,9 +40,26 @@ class MyApp extends StatelessWidget {
         canvasColor: Colors.white,
         primaryColor: primaryColor,
       ),
-      home: LoginScreen(),
+      home: SplashScreen(
+        seconds: 5,
+        navigateAfterSeconds: openingScreen,
+        title: Text(
+          "Fancy Todo",
+          style: TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundGradient: LinearGradient(
+          colors: [textColorPrimaryDark, primaryColor, textColorPrimaryLight],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
       routes: {
         Constants.ROUTE_TODO: (context) => TodoScreen(),
+        Constants.ROUTE_LOGIN: (context) => LoginScreen(),
       },
     );
   }

@@ -56,13 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
               child: _buildLoginButton(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
               child: _buildSeparator(),
             ),
             _buildSocialLoginButtons(),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 24, left: 16, right: 16, bottom: 24),
+              padding: const EdgeInsets.only(
+                  top: 24, left: 16, right: 16, bottom: 24),
               child: _buildDontHaveAccount(),
             ),
           ],
@@ -73,13 +74,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildScreenLeading() {
     return GestureDetector(
-        onTap: () {
-          // There is nowhere at the moment
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(Icons.keyboard_backspace, color: primaryColor,),
-        ),);
+      onTap: () {
+        // There is nowhere at the moment
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          Icons.keyboard_backspace,
+          color: primaryColor,
+        ),
+      ),
+    );
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -101,7 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
             textInputAction: TextInputAction.done,
             cursorColor: accentColor,
             decoration: InputDecoration(
-                labelText: "Email", border: UnderlineInputBorder(),),
+              labelText: "Email",
+              border: UnderlineInputBorder(),
+            ),
           ),
           TextFormField(
             controller: _passwordController,
@@ -178,9 +185,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginButton() {
     return RaisedButton(
       elevation: 8,
-      onPressed: () {
-        if (_formKey.currentState.validate()){
-          Navigator.of(context).pushNamed(Constants.ROUTE_TODO);
+      onPressed: () async {
+        if (_formKey.currentState.validate()) {
+          await loginStore.logIn();
+          if (loginStore.isLoggedIn) {
+            Navigator.of(context).pushReplacementNamed(Constants.ROUTE_TODO);
+          } else {
+            _showLoginFailedDialog();
+          }
         } else {
           setState(() {
             _autoValidate = true;
@@ -191,6 +203,25 @@ class _LoginScreenState extends State<LoginScreen> {
       textColor: Colors.white,
       child: Text("Login"),
     );
+  }
+
+  void _showLoginFailedDialog() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("Error"),
+            content: Text("Sorry, but something went wrong. Please try again"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Widget _buildSeparator() {
