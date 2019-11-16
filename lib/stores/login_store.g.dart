@@ -39,4 +39,11 @@ mixin _$LoginStore on _LoginStore, Store {
   Future<void> logIn() {
     return _$logInAsyncAction.run(() => super.logIn());
   }
+
+  final _$logOutAsyncAction = AsyncAction('logOut');
+
+  @override
+  Future<void> logOut() {
+    return _$logOutAsyncAction.run(() => super.logOut());
+  }
 }

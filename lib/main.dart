@@ -1,7 +1,8 @@
 import 'package:amzur_todo_example/constants.dart';
+import 'package:amzur_todo_example/screens/stations_screens.dart';
 import 'package:amzur_todo_example/screens/login_screen.dart';
 import 'package:amzur_todo_example/screens/splash_screen.dart';
-import 'package:amzur_todo_example/screens/todo_screen.dart';
+import 'package:amzur_todo_example/stores/charging_hubs_store.dart';
 import 'package:amzur_todo_example/stores/login_store.dart';
 import 'package:amzur_todo_example/stores/todo_store.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ void main() async {
   String openingScreen;
 
   if (loginStore.isLoggedIn) {
-    openingScreen = Constants.ROUTE_TODO;
+    openingScreen = Constants.ROUTE_STATIONS;
   } else {
     openingScreen = Constants.ROUTE_LOGIN;
   }
@@ -24,6 +25,7 @@ void main() async {
 
 final TodoStore todoStore = TodoStore();
 final LoginStore loginStore = LoginStore();
+final ChargingHubsStore chargingHubsStore = ChargingHubsStore();
 
 class MyApp extends StatelessWidget {
   final String openingScreen;
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
         seconds: 5,
         navigateAfterSeconds: openingScreen,
         title: Text(
-          "Fancy Todo",
+          "EVoke",
           style: TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
@@ -58,8 +60,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: {
-        Constants.ROUTE_TODO: (context) => TodoScreen(),
         Constants.ROUTE_LOGIN: (context) => LoginScreen(),
+        Constants.ROUTE_STATIONS: (context) => StationsScreens(),
       },
     );
   }

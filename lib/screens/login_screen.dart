@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (_formKey.currentState.validate()) {
           await loginStore.logIn();
           if (loginStore.isLoggedIn) {
-            Navigator.of(context).pushReplacementNamed(Constants.ROUTE_TODO);
+            Navigator.of(context).pushReplacementNamed(Constants.ROUTE_STATIONS);
           } else {
             _showLoginFailedDialog();
           }
