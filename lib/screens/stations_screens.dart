@@ -44,8 +44,8 @@ class _StationsScreensState extends State<StationsScreens>
         controller: _tabBarController,
         children: <Widget>[
             MapScreen(),
-          Container(),
-          Container(),
+          Container(color: Colors.red,),
+          Container(color: Colors.blue),
         ],
       ),
     );

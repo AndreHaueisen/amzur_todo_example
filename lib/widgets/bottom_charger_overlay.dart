@@ -1,15 +1,29 @@
+import 'package:amzur_todo_example/dialogs/edit_todo_dialog.dart';
 import 'package:amzur_todo_example/main.dart';
 import 'package:amzur_todo_example/models/charging_hub.dart';
 import 'package:flutter/material.dart';
 
-class BottomChargerOverlay extends StatelessWidget {
-  final ChargingHub hub;
+class BottomChargerOverlay extends StatefulWidget {
 
-  BottomChargerOverlay(this.hub);
+  // Remember to watch the videos about keys.
+  // https://www.youtube.com/watch?v=kn0EOS-ZiIc&t=
+  // I will not be able to explain it better than the Flutter lady did.
+  // I had to watch it several times to get it, and I still
+  // have to watch it sometimes :)
+  final Key key;
+
+  BottomChargerOverlay({@required this.key}) : super(key: key);
+
+  @override
+  BottomChargerOverlayState createState() => BottomChargerOverlayState();
+}
+
+class BottomChargerOverlayState extends State<BottomChargerOverlay> {
+  ChargingHub hub;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return hub != null ? Card(
       elevation: 10,
       margin: const EdgeInsets.all(8),
       child: Padding(
@@ -40,7 +54,13 @@ class BottomChargerOverlay extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ) : Container();
+  }
+
+  void onHubChance(ChargingHub hub){
+    setState(() {
+      this.hub = hub;
+    });
   }
 
   Widget _buildAddressFavoriteRow() {
@@ -138,7 +158,12 @@ class BottomChargerOverlay extends StatelessWidget {
 
   Widget _buildDetailsButton() {
     return RaisedButton(
-      onPressed: () {},
+      onPressed: () {
+        // dialog is here as an example. Remove it later
+        showDialog(context: context, builder: (_){
+          return EditTodoDialog();
+        });
+      },
       color: accentColor,
       textColor: Colors.white,
       child: Text("View Details"),

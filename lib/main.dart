@@ -8,8 +8,7 @@ import 'package:amzur_todo_example/stores/todo_store.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Important line if you are going to hang app initialization
+  WidgetsFlutterBinding.ensureInitialized(); // Important line if you are going to hang app initialization
   await loginStore.initialize();
   String openingScreen;
 

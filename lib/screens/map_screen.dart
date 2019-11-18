@@ -10,19 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapScreen extends StatefulWidget {
-  @override
-  _MapScreenState createState() => _MapScreenState();
-}
-
-class _MapScreenState extends State<MapScreen> {
+class MapScreen extends StatelessWidget {
   final Completer<GoogleMapController> _controller = Completer();
-  ChargingHub _selectedHub;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: chargingHubsStore.initialLocation,
     zoom: 12,
   );
+
+  GlobalKey<BottomChargerOverlayState> _overlayKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +28,8 @@ class _MapScreenState extends State<MapScreen> {
           builder: (context) {
             // Why do we need a future builder here?
             return FutureBuilder<Set<Marker>>(
-              future: _buildMarkers(90, 90), // There is a performance problem with this line. Any idea what it is?
+              future: _buildMarkers(90, 90),
+              // There is a performance problem with this line. Any idea what it is?
               builder: (_, snapshot) {
                 final bool hasMarkers =
                     snapshot.connectionState == ConnectionState.done &&
@@ -43,9 +40,7 @@ class _MapScreenState extends State<MapScreen> {
                   initialCameraPosition: _kGooglePlex,
                   markers: hasMarkers ? snapshot.data : {},
                   onTap: (_) {
-                    setState(() {
-                      _selectedHub = null;
-                    });
+                    _overlayKey.currentState.onHubChance(null);
                   },
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
@@ -55,14 +50,13 @@ class _MapScreenState extends State<MapScreen> {
             );
           },
         ),
-        _selectedHub != null
-            ? Align(
-                alignment: Alignment.bottomCenter,
-                child: BottomChargerOverlay(_selectedHub),
-              )
-            : Container(),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: BottomChargerOverlay(key: _overlayKey),
+        )
       ],
     );
+
   }
 
   Future<Set<Marker>> _buildMarkers(int width, int height) async {
@@ -89,6 +83,7 @@ class _MapScreenState extends State<MapScreen> {
 
       canvas.drawCircle(Offset(radius, radius), radius,
           backgroundPaint); // draws the white circle
+
       canvas.drawArc(
         Rect.fromCircle(
             center: Offset(radius, radius), radius: radius - strokeWidth + 4),
@@ -138,9 +133,7 @@ class _MapScreenState extends State<MapScreen> {
         markerId: MarkerId(hub.name),
         position: hub.location,
         onTap: () {
-          setState(() {
-            _selectedHub = hub;
-          });
+          _overlayKey.currentState.onHubChance(hub);
         },
       ));
     }
