@@ -1,10 +1,14 @@
+import 'dart:io';
+
+import 'package:amzur_todo_example/constants.dart';
 import 'package:amzur_todo_example/dialogs/edit_todo_dialog.dart';
 import 'package:amzur_todo_example/main.dart';
 import 'package:amzur_todo_example/models/charging_hub.dart';
+import 'package:amzur_todo_example/routes.dart';
+import 'package:amzur_todo_example/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class BottomChargerOverlay extends StatefulWidget {
-
   // Remember to watch the videos about keys.
   // https://www.youtube.com/watch?v=kn0EOS-ZiIc&t=
   // I will not be able to explain it better than the Flutter lady did.
@@ -23,41 +27,43 @@ class BottomChargerOverlayState extends State<BottomChargerOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return hub != null ? Card(
-      elevation: 10,
-      margin: const EdgeInsets.all(8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            _buildAddressFavoriteRow(),
-            Text(
-              hub?.name ?? "",
-              style: TextStyle(
-                  color: textColorPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20),
+    return hub != null
+        ? Card(
+            elevation: 10,
+            margin: const EdgeInsets.all(8),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  _buildAddressFavoriteRow(),
+                  Text(
+                    hub?.name ?? "",
+                    style: TextStyle(
+                        color: textColorPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: _buildDistanceInfo(),
+                  ),
+                  _buildSeparator(),
+                  _buildStatus(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: _buildDetailsButton(),
+                  ),
+                ],
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: _buildDistanceInfo(),
-            ),
-            _buildSeparator(),
-            _buildStatus(),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: _buildDetailsButton(),
-            ),
-          ],
-        ),
-      ),
-    ) : Container();
+          )
+        : Container();
   }
 
-  void onHubChance(ChargingHub hub){
+  void onHubChance(ChargingHub hub) {
     setState(() {
       this.hub = hub;
     });
@@ -159,10 +165,24 @@ class BottomChargerOverlayState extends State<BottomChargerOverlay> {
   Widget _buildDetailsButton() {
     return RaisedButton(
       onPressed: () {
-        // dialog is here as an example. Remove it later
-        showDialog(context: context, builder: (_){
-          return EditTodoDialog();
-        });
+        if (Platform.isAndroid) {
+          Navigator.of(context).pushNamedAndRemoveUntil(Constants.ROUTE_LOGIN, (route){
+            return false;
+          });
+        } else {
+          // Guys, if you think about it, the IOS animation is going right to left by default because
+          // you are pushing a new screen (the login screen). It would go in the other direction if you were popping it.
+          // As development moves forward, you may be able to guarantee that the user is in the first screen when he logs out (depending on where you put the log out button).
+          // In that case, you can use popAndPushNamed()
+          // For now, the solution you have is to use a custom route transition. I created a SlideLeftRoute in the routes.dart file.
+          // Notice that the only difference between it and SlideUpRoute is the presence of a route name and the begin & end parameters
+          Navigator.of(context).pushAndRemoveUntil(
+            SlideLeftRoute(page: LoginScreen(), routeName: Constants.ROUTE_LOGIN),
+            (route) {
+              return false; // returning false will dismiss every route below the one you are pushing
+            },
+          );
+        }
       },
       color: accentColor,
       textColor: Colors.white,

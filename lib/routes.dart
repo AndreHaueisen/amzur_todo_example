@@ -30,6 +30,38 @@ class FadeInRoute extends PageRouteBuilder {
   );
 }
 
+class SlideLeftRoute extends PageRouteBuilder {
+  final Widget page;
+  final String routeName;
+
+  SlideLeftRoute({this.page, this.routeName})
+      : super(
+      pageBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          ) =>
+      page,
+      transitionsBuilder: (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+          ) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset(1.0, 0.0),
+            end: Offset(0, 0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 500,),
+      opaque: true,
+      settings: RouteSettings(name: routeName)
+  );
+}
+
 class SlideUpRoute extends PageRouteBuilder {
   final Widget page;
 
