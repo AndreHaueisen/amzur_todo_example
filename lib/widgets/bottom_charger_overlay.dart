@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:amzur_todo_example/constants.dart';
 import 'package:amzur_todo_example/dialogs/edit_todo_dialog.dart';
 import 'package:amzur_todo_example/main.dart';
-import 'package:amzur_todo_example/models/charging_hub.dart';
+import 'package:amzur_todo_example/models/charge_point.dart';
 import 'package:amzur_todo_example/routes.dart';
 import 'package:amzur_todo_example/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class BottomChargerOverlay extends StatefulWidget {
 }
 
 class BottomChargerOverlayState extends State<BottomChargerOverlay> {
-  ChargingHub hub;
+  ChargePoint hub;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class BottomChargerOverlayState extends State<BottomChargerOverlay> {
                 children: <Widget>[
                   _buildAddressFavoriteRow(),
                   Text(
-                    hub?.name ?? "",
+                    hub?.id ?? "",
                     style: TextStyle(
                         color: textColorPrimary,
                         fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class BottomChargerOverlayState extends State<BottomChargerOverlay> {
         : Container();
   }
 
-  void onHubChance(ChargingHub hub) {
+  void onHubChance(ChargePoint hub) {
     setState(() {
       this.hub = hub;
     });

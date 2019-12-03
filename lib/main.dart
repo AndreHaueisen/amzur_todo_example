@@ -2,14 +2,19 @@ import 'package:amzur_todo_example/constants.dart';
 import 'package:amzur_todo_example/screens/stations_screens.dart';
 import 'package:amzur_todo_example/screens/login_screen.dart';
 import 'package:amzur_todo_example/screens/splash_screen.dart';
-import 'package:amzur_todo_example/stores/charging_hubs_store.dart';
+import 'package:amzur_todo_example/stores/charge_points_store.dart';
 import 'package:amzur_todo_example/stores/login_store.dart';
 import 'package:amzur_todo_example/stores/todo_store.dart';
 import 'package:flutter/material.dart';
 
+final TodoStore todoStore = TodoStore();
+final LoginStore loginStore = LoginStore();
+final ChargePointsStore chargePointsStore = ChargePointsStore();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Important line if you are going to hang app initialization
   await loginStore.initialize();
+  chargePointsStore.initialize();
   String openingScreen;
 
   if (loginStore.isLoggedIn) {
@@ -17,14 +22,12 @@ void main() async {
   } else {
     openingScreen = Constants.ROUTE_LOGIN;
   }
-  runApp(MyApp(
-    openingScreen: openingScreen,
-  ));
+  runApp(
+    MyApp(
+      openingScreen: openingScreen,
+    ),
+  );
 }
-
-final TodoStore todoStore = TodoStore();
-final LoginStore loginStore = LoginStore();
-final ChargingHubsStore chargingHubsStore = ChargingHubsStore();
 
 class MyApp extends StatelessWidget {
   final String openingScreen;

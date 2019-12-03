@@ -16,7 +16,7 @@ class _StationsScreensState extends State<StationsScreens>
   @override
   void initState() {
     super.initState();
-    chargingHubsStore.getChargingHubs();
+    chargePointsStore.getChargingHubs();
     _tabBarController = TabController(length: 3, vsync: this);
   }
 

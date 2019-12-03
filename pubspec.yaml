@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.6.0-dev.4.0.flutter-1103600280 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -26,6 +26,7 @@ dependencies:
   font_awesome_flutter: ^8.5.0 # contains more icon options
   shared_preferences: ^0.5.4+5 # saves state across sections
   google_maps_flutter: ^0.5.21+11
+  geolocator: ^5.1.5
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
